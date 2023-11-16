@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="私のナポリの男たち楽曲ランキング">
+    <meta name="twitter:description" content="第1位:：${firstPlace}\n第2位：${secondPlace}\n第3位：${thirdPlace}">
+    <meta name="twitter:image" content="thumbnail.png"> <!-- ここにサムネイルのURLを追加 -->
+    
+    <title>ナポリの男たち楽曲のランキングを作ろう！</title>
+    <style>
+        body {
+            background-color: #FEF1D8;
+        }
+
+        .start a {
+            background: #7F1E19;
+            border-radius: 3px;
+            position: relative;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 0 auto;
+            max-width: 400px;
+            padding: 10px 25px;
+            color: #FFFFFF;
+            transition: 0.3s ease-in-out;
+            font-weight: 400;
+        }
+
+        .which a {
+            border-radius: 3px;
+            position: relative;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 0 auto;
+            max-width: 500px;
+            padding: 20px 25px;
+            color: black;
+            transition: 0.3s ease-in-out;
+            font-weight: 600;
+        }
+
+        .start a:hover {
+            background: #500F0D;
+            color: #FFFFFF;
+            cursor: pointer;
+            
+        }
+
+        .which a:hover {
+            color: black;
+            cursor: pointer;   
+        }
+
+        .start a:after {
+            content: '';
+            width: 5px;
+            height: 5px;
+            transform: rotate(45deg) translateY(-50%);
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            border-radius: 1px;
+            transition: 0.3s ease-in-out;
+        }
+        .start  a:hover:after {
+            border-color: #FFFFFF;
+        }
+
+        #results {
+            text-align: center;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin: 0 auto;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        /* 4行ごとに背景色を変化させる（色の濃度を薄くする） */
+        tr:nth-child(4n+1) td {
+            background-color: rgba(221, 160, 221, 0.5); /* plumを薄くした色 */
+        }
+
+        tr:nth-child(4n+2) td {
+            background-color: rgba(240, 230, 140, 0.5); /* khakiを薄くした色 */
+        }
+
+        tr:nth-child(4n+3) td {
+            background-color: rgba(102, 205, 170, 0.5); /* mediumaquamarineを薄くした色 */
+        }
+
+        tr:nth-child(4n+4) td {
+            background-color: rgba(135, 206, 235, 0.5); /* skyblueを薄くした色 */
+        }
+
+        th {
+            background-color: rgba(235, 157, 135, 0.5);
+        }
+
+        /* 四角形の箱を定義 */
+        .boxed {
+            border: 2px solid #000; /* 枠線を設定 */
+            padding: 10px; /* 内側の余白を設定 */
+            width: 400px; /* 幅を設定 */
+            margin: 40px auto; /* 中央に配置するためのマージン（縦方向の余白を追加） */
+            background-color: aliceblue;
+        }
+
+        .tw_share {
+            border-radius: 3px;
+            position: relative;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            font-weight: bold;
+            background-color: #00acee;
+            color: #fff;
+            border-radius: 5px;
+            margin: 0 auto;
+            max-width: 280px;
+            padding: 10px 25px;
+        }
+
+        .tw_share:hover {
+            opacity: 0.6;
+            transition: 1.0s ;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #musicList {
+            display: flex;
+            flex-wrap: wrap;
+            list-style: none;
+            padding: 0;
+            justify-content: space-between; /* 列の間隔を均等に設定 */
+            margin: 0 30px; /* 列の間隔の調整 */
+            
+        }
+
+        #musicList ul {
+            flex-basis: 30%; 
+            padding: 10px;
+            box-sizing: border-box;
+            margin: 5px; 
+            background: #7F1E19;
+            color: #FFFFFF;
+        }
+
+
+        #musicList ul input[type="checkbox"] {
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        #musicList ul a {
+            margin-left: 20px; 
+        }
+
+        #selectButton {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        #selectButton a {
+            flex: 0 0 calc(20% - 20px); /* 例として3列、20pxの間隔を取る */
+            margin: 10px;
+            box-sizing: border-box;
+            border-radius: 3px;
+            padding: 10px 25px;
+            font-weight: 100;
+        }
+
+        #selectButton a:hover {
+            cursor: pointer; 
+            font-weight: 600;
+        }
+
+        #checkandcancelButton {
+            display:inline;
+        }
+        
+        #checkandcancelButton a {
+            border-radius: 3px;
+            padding: 10px 10px;
+            color: #FFFFFF;
+            background: #7F1E19;
+        }
+
+        #checkandcancelButton a:hover {
+            background: #500F0D;
+            color: #FFFFFF;
+            cursor: pointer;
+            font-weight: 600; 
+        }
+
+        #addToPlaylistButton a:hover {
+            background: #500F0D;
+            color: #FFFFFF;
+            cursor: pointer; 
+            font-weight: 600;
+        }
+        
+        #addToPlaylistButton a{
+            background: #7F1E19;
+            border-radius: 3px;
+            position: relative;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 0 auto;
+            max-width: 400px;
+            padding: 10px 25px;
+            color: #FFFFFF;
+            transition: 0.3s ease-in-out;
+            font-weight: 100;
+        }
+
+        #play-button {
+            background-color: transparent; 
+            color: #fff; 
+            padding: 5px 10px; 
+            text-decoration: none; 
+            border-radius: 4px; 
+        }
+
+        #play-button:hover {
+            color: #007BFF; 
+        }
+
+        
+
+    </style>
+
+</head>
+<body>
+    <header id="header" style="text-align:center;">
+        <img src="title.png" style="max-width: 80%;" alt="タイトル画面">
+    </header>
+
+    <div id="intro" style="text-align:center; color:#7F1E19; font-size:24px; font-weight:600;">
+        <img src="introduce.png" style="max-width: 70%;" alt="説明画像">
+        <br>制作者X(旧twitter):<a href="https://twitter.com/karuma_garbage">@karuma_garbage</a></br>
+        <br></br>
+    </div>
+
+    <div id="start-button" class="start">
+        <a onclick="checkDiagnosis()">スタート&ペンチ！！</a>
+        <br></br>
+    </div>
+
+    <div id="updata-include" style="text-align:center; font-size:24px; font-weight:600; color:#7F1E19;">
+        <img src="updata.png" style="max-width: 35%;" alt="アップデート履歴">
+        <details>
+            <summary>
+                <span>2023/11/06</span>
+                更新内容
+            </summary>
+            <p>
+                <span>&#x1f195;</span>
+                更新履歴のセクションを追加
+            </p>
+            <p>
+                <span>&#x1f383;</span>
+                楽曲「ナポンヌのムスカリ」をスグールverと蘭たんverに分別
+            </p>
+            <p>
+                <span>&#x1f35d;</span>
+                楽曲「僕も(わたしも)」をナポ男合唱団と蘭たん合唱団に分別
+            </p>
+            <p>
+                <span>&#x1f43c;</span>
+                楽曲「チョコレートパーシーのテーマ(怒羅権過流)」を追加
+            </p>
+            <p>
+                <span>&#x1f35d;</span>
+                楽曲「ツーオクターブ上で涙塩分マルゲリータ」を追加
+            </p>
+            <p>
+                <span>&#x1f518;</span>
+                楽曲「土曜日のおじさん」を追加
+            </p>
+        </details>
+        <details>
+            <summary>
+                <span>2023/11/OO</span>
+                更新内容
+            </summary>
+            <p>
+                <span>&#x1f195;</span>
+                ソートする楽曲を選択する機能を追加
+            </p>
+            <p>
+                <span>&#x1f195;</span>
+                ソート中に楽曲を聴くことが可能となる機能を追加
+            </p>
+            <p>
+                <span>&#x1f5d1;</span>
+                用意していた楽曲パターンを消去
+            </p>
+        </details>
+    </div>
+
+    <div id="how-to-play" style="text-align:center; display:none">
+        <img src="how_to_play.png" style="max-width: 70%;" alt="遊び方画像">
+        <br></br>
+    </div>
+
+    <div id="check-button" class="check" style="display: none; text-align: center; flex-direction: column; align-items: center;">
+        <p style="font-size:32px; font-weight: 100;">選択された楽曲数: <span id="selectedCount">0</span></p>
+        <div id="checkandcancelButton">
+            <a id="checkAll">全選択</a>
+            <a id="uncheckAll">全解除</a>
+        </div>
+        <br></br>
+        <div id="selectButton">
+            <a id="lantah" style="background-color: plum;">蘭たん歌唱楽曲</a>
+            <a id="sugiru" style="background-color: khaki;">SUGIRU歌唱楽曲</a>
+            <a id="hacchi" style="background-color: mediumaquamarine;">hacchi歌唱楽曲</a>
+            <a id="shu3" style="background-color: skyblue;">shu3歌唱楽曲</a>
+            <a id="hitsong" style="background: linear-gradient(to right, plum, khaki, mediumaquamarine, skyblue);">年末ヒットソングメドレー楽曲</a>
+        </div>
+        <br></br>
+        <ul id="musicList">
+            <!-- 楽曲のリストがここに自動的に生成されます -->
+        </ul>
+        <div id="addToPlaylistButton">
+            <a id="addToPlaylist">選んだ楽曲でソートする</a>
+        </div>
+    </div>
+    
+    <div id="which-button" class="which" style="display: none; text-align: center; flex-direction: column; align-items: center;">
+        <div id="which" style="text-align:center;">
+            <img src="which.png" style="max-width: 30%;" alt="選択画画面">
+            <br></br>
+        </div>
+        <a id="buttonTemp0" style="background-color: rgba(102, 205, 170, 0.5)"> <a id="openUrlTemp0"></a> </a>
+        <br></br>
+        <a id="buttonTemp1" style="background-color: rgba(250, 128, 114, 0.5)"> <a id="openUrlTemp1"></a> </a>
+        <br></br>
+        <a id="undoButton" style="background-color: #FFFFFF; display:none">1つ前の選択肢に戻る</a>
+    </div>
+
+    <div id="results" style="display:none;">
+        <!-- 結果テーブル -->
+        <div id="ranking" style="text-align:center;">
+        </div>
+        <br></br>
+        <table id="rankingTable" >
+            <thead>
+                <tr>
+                    <th>順位</th>
+                    <th>楽曲</th>
+                </tr>
+            </thead>
+            <tbody id="rankingBody">
+            </tbody>
+        </table>
+        <br></br>
+        <div id="twitter-share-button" class="tw_share">
+            <a>ランキングTOP3をシェア＆ペンチ！</a>
+        </div>
+    </div>
+
+    <div id="box" class="boxed" style="display: none;">
+        <p align="center">
+            引用元
+            <br>
+                <cite>
+                    <a href="https://www.youtube.com/@napolimens/featured">
+                        Youtube:ナポリの男たち
+                    </a>
+                </cite>
+            </br>
+            <br>
+                <cite>
+                    <a href="https://www.youtube.com/@user-vn1ne1dr5l">
+                        Youtube:ナポリの男たち切り抜き【公認】
+                    </a>
+                </cite>
+            </br>
+            <br>
+                <cite>
+                    <a href="https://www.nicovideo.jp/user/58413388">
+                        ニコニコ動画:ナポリの男たち
+                    </a>
+                </cite>
+            </br>
+            <br>
+                <cite>
+                    <a href="https://ch.nicovideo.jp/naporich">
+                        ニコニコ動画:ナポリの男たちch
+                    </a>
+                </cite>
+            </br>
+        </p>
+    </div>
+
+<script>
+    // 音楽リストの初期化
+    let all_list = [['涙塩分マルゲリータ'], ['好きやねん(さだ民生) '], ['ローション大蛇(さだ民生) '], ['白ニット センター分け(さだ民生)'], ['解放 ～リベレーション～'], ['高槻ワンサイドラバー '], ['魔法少女ミンキーピンキーの歌 '], ['僕も(わたしも) 蘭たん合唱団'], ['老境'], ['A-FLOW'], ['Spicy Addition'], ['あの星を求めて'], ['おじさんの歌'], ['はつ桜'], ['真相 ～janseung～'], ['ウエストスター☆ピーターパン'], ['O,Такацуки'], ['ワン・エイト・ディスコ'], ['CHANGE MY MIND'], ['hacchi likes apples.'], ['ハッチャンサンバ'], ['ティニス'], ['DreamFire'], ['ヌメ乗りジョニー'], ['Dearパパ ～Bad Description～'], ['FIGHT！デバッグ☆シュピキュア'], ['本能デトックス'], ['PARADISE NIGHT'], ['shu3やめへんでの歌'], ['高槻の風のように…'], ['RING-TONE'], ['横浜哀恋慕'], ['ナポ男再結成の歌(仮)'], ['KAKUGARI RAP BATTLE'], ['OH! SUN POWER3'], ['嗚呼、美しきナポンヌ'], ['王の憂い'], ['鳥になりたい'], ['ナポンヌのムスカリ スグールver'], ['スリーピングシティ'], ['浪速ナポリ節'], ['チョコレートパーシーのテーマ(怒羅権過流)'], ['ツーオクターブ上で涙塩分マルゲリータ'], ['僕も(わたしも) ナポ男合唱団'], ['ナポンヌのムスカリ 蘭たんver'], ['土曜日のおじさん']];
+    let url_all_list = [['https://youtu.be/JZW_3RjYhqU?si=x327tpknEy84SgN7'], ['https://youtu.be/cLgMMChC6IU?si=-XT-aEbbP0vL8mSv&t=51'], ['https://youtu.be/cLgMMChC6IU?si=B1PgaHNqARFLRM_4&t=181'], ['https://youtu.be/cLgMMChC6IU?si=sJAK0HbY3YBbQuEz&t=313'], ['https://youtu.be/iny5j5Ahbh8?si=-ZQi7hfzfMaTcRAf'], ['https://youtu.be/RngJOIMQrz0?si=s5kq09oxiyJs_AHu'], ['https://youtu.be/JCCKHm0FsUY?si=HbBw6_KnEuw0amf6'], ['https://youtu.be/7aK5wV45I5I?si=lnJSlf4MSD_nKCT-'], ['https://youtu.be/5A62k2tPe20?si=gI9hgEcNwL3OUvZk'], ['https://youtu.be/5A62k2tPe20?si=5sBrmeuPg2NdtpEa&t=102'], ['https://youtu.be/5A62k2tPe20?si=cRJO5CZuagbdp83f&t=303'], ['https://youtu.be/bxTKdXBy_Lk?si=UDKdPovbVUoCsg8r&t=1206'], ['https://youtu.be/8OsFbkDhPn4?si=0mLg-nOJFdQmQRkF'], ['https://youtu.be/cLBiQRxwyCA?si=5pBMX8tvQ6Y0VLaY'], ['https://youtu.be/Hbqf1NEmF4w?si=N52u5VfSWTlm49Jh'], ['https://youtu.be/WFJt-p5z2uY?si=QG9IrfzCaryHyNC4'], ['https://youtu.be/dLqqL6NQE3g?si=Yh3bTEiAIG-jtCo4&t=200'], ['https://youtu.be/pWb1DtV6KJk?si=QEmeZ3q0_UZq8F9T'], ['https://youtu.be/tFwP3YpopMg?si=ECtPyLGdZvS-Rnkg'], ['https://youtu.be/WFJt-p5z2uY?si=1cf9l1Jt91kEI44p&t=227'], ['https://youtu.be/dLqqL6NQE3g?si=k2Mu9b3WnltS8dg1&t=87'], ['https://youtu.be/_1t-Utl7Sps?si=LavviLViIgoT8Rz6'], ['https://youtu.be/1Vn4qie9YN0?si=kpk-YQ-Vqmd0iMZA'], ['https://youtu.be/vJGQLltniZY?si=Jw8hz4MV-pzLF8bS'], ['https://youtu.be/jLbuiswY5-I?si=LTsIzpZZgDoakIWJ'], ['https://youtu.be/H8-s2TIay6Y?si=CJD1kMXVFGWEKyDc'], ['https://youtu.be/WFJt-p5z2uY?si=NyH8i3swWidHm9-e&t=112'], ['https://youtu.be/dLqqL6NQE3g?si=lEhUPKIUXP9SR87J'], ['https://youtu.be/lshRIlYCYBM?si=yTiJVBFiewbTluK9&t=159'], ['https://www.nicovideo.jp/watch/so35336806?from=3366'], ['https://youtu.be/F6uzbrt1Hmk?si=Z76RzEIU6wnGffaW&t=5'], ['https://youtu.be/F6uzbrt1Hmk?si=iTDN-jDEYiqsRSvL&t=94'], ['https://www.nicovideo.jp/watch/so33484114?from=4615'], ['https://youtu.be/F6uzbrt1Hmk?si=TSv30F7FzisP6RkB&t=211'], ['https://youtu.be/5A62k2tPe20?si=gN52_cFebiqclQAC&t=201'], ['https://www.nicovideo.jp/watch/so37105999?from=3260'], ['https://www.nicovideo.jp/watch/so37105999?from=3543'], ['https://www.nicovideo.jp/watch/so37105999?from=3769'], ['https://www.nicovideo.jp/watch/so37105999?from=4041'], ['https://youtu.be/C5ecZ20Ur3E?si=m8Ajx9YyHnz0FJKz'], ['https://www.nicovideo.jp/watch/sm29801292?from=1944'], ['https://youtu.be/D1GdFeawlNY?si=aiTV_N29AX2WXzca&t=610'], ['https://www.nicovideo.jp/watch/so34436830?from=4254'], ['https://youtu.be/c90gQPrfr8A?si=70Bugw2bPG9AU4Wd&t=864'], ['https://youtu.be/elfIvm1LOvc?si=HtSg5Mj6kvnewZ0W&t=745'], ['https://youtu.be/AO7CoFAb0j4?si=v4vqpIe9DpRgjrL8&t=569']];
+    let text_all_list = [['いつか行きたいねナポリ 鉄のカモメに乗って'], ['「時代はYoutubeやで！アホ！さいなら！」'], ['shu3ヌルヌル 大蛇もヌルヌル'], ['あれは間違いなく 僕の白ニット'], ['堕ちてく天使 そいつの希望(はね) ひとつひとつ 浸食(むし)ってく'], ['日常に飛び込んで ああ消えたい'], ['だってミンキー魔法少女だもーん'], ['僕らも青い空で生きたい'], ['褪せぬは夏色 夢の色'], ['視界をジャックして kuru fuwari'], ['I`m (Boom) Jack "O" (ウッ) (アッ...)'], ['キスして ハグして ここでして (オォン!!)'], ['ボトルキープキープボトル 今日は飲みたいんだ'], ['あの日にも 見てた景色は この桜坂'], ['母親！ (モチャーン！)'], ['お土産にやるわ クソして寝るんやで かなわんわ！'], ['O, далеко Такацуки O, Утопия Такацуки'], ['一夜限りの魔法 君と僕で ワン・エイト・ディスコ'], ['だけど本当はわかってる 俺が一番変わらなきゃ'], ['ba-da-ba-di-do-ba be bop bep do pa be-di ba bo pa'], ['ハッチャン サンバ ハッチャン 南のリズムが響いたら'], ['あの日の動画をかき消すように チェコものの興奮忘れぬように'], ['「パンツを夜に洗ってる？」あの時…すげぇキレて…ごめんな…'], ['今年も渚に夏が来る 白浜に実りゆく恋の果実'], ['お父さん ありがとう あれしてこれして ありがとう'], ['限界突破！ 自分をデコってなんぼでしょ！？'], ['うんざり脱却 解放せよデトックス 野生オス本能だわい！'], ['Pa-ra Pa-ra Paradise night, Hey もう全部捨てちゃって さぁ'], ['やめへんで  🐼「いやもうやめろ」'], ['ワイは ハリケーンすぎる 高槻の風のように…'], ['伝わらないの？ いつも君はMissed call'], ['乱れたシーツにひとり 静かな埠頭にひとり'], ['思い出そうナポリの歌 まだ間に合うの？'], ['俺たち角刈り NAPOLI`s PLAY BOY'], ['Around サーティー フォーティー 油ものばっかりは ノーサンキュー'], ['運命見つめる ナポンヌのムスカリ'], ['何も知らない2人の王子 どこまでも遠く飛んで行け'], ['私が鳥ならば羽広げ 飛んで帰ろうセピア色の日々'], ['天高く昇れ 届け ナポンヌのムスカリ'], ['二人で見た あの日の夕焼け空'], ['Nobady knows… 私、15歳 すき家でバイト'], ['近畿北部連合総督 怒羅権過流'], ['いつか行きたいねナポリ (2オクターブ上)'], ['わたしも大空で 生きたいな'], ['暮れなずんだ街を包む ムスカリの香り'], ['たのしい土曜日を 過ごしていました いつまでも']];
+    let music_list = [];
+    let url_list = [];
+    let text_list = [];
+
+    // 結合用・結果用リスト
+    let concat_list = [];
+    let conclude_list = [];
+    let url_concat_list = [];
+    let url_conclude_list = [];
+    let text_concat_list = [];
+    let text_conclude_list = [];
+
+    //スタック用リスト
+    let stateStack = [];
+
+    // ボタン要素を取得
+    let buttonTemp0 = document.getElementById("buttonTemp0");
+    let buttonTemp1 = document.getElementById("buttonTemp1");
+    let undoButton = document.getElementById("undoButton");
+    let addToPlaylistButton = document.getElementById('addToPlaylist');
+    let openUrlTemp0 = document.getElementById("openUrlTemp0");
+    let openUrlTemp1 = document.getElementById("openUrlTemp1");
+
+    //チェックリストを取得
+    let musicList = document.getElementById('musicList');
+
+    all_list.forEach((music, index) => {
+        let ul = document.createElement('ul');
+        let checkbox = document.createElement('input');
+        let label = document.createElement('label');
+        let playButton = document.createElement('a');
+
+        playButton.id = 'play-button'; 
+        checkbox.type = 'checkbox';
+        checkbox.id = `music${index + 1}`;
+        label.htmlFor = `music${index + 1}`;
+        label.textContent = music[0];
+        playButton.textContent = '再生';
+        playButton.href = url_all_list[index][0]; // <a> タグの href 属性に URL を設定
+        playButton.target = '_blank';
+
+        ul.appendChild(checkbox);
+        ul.appendChild(label);
+        ul.appendChild(playButton);
+        musicList.appendChild(ul);
+
+        // music_listとurl_Listに楽曲情報を追加
+        music_list.push(music);
+        url_list.push(url_all_list[index]);
+    });
+
+
+    addToPlaylistButton.addEventListener('click', () => {
+        music_list = [];
+        url_list = [];
+        text_list = [];
+        
+
+        let checkboxes = musicList.querySelectorAll('input[type="checkbox"]');
+
+        checkboxes.forEach((checkbox, index) => {
+            if (checkbox.checked) {
+                music_list.push([all_list[index][0]]);
+                url_list.push([url_all_list[index][0]]);
+                text_list.push([text_all_list[index][0]]);
+            }
+        });
+
+        // music_listとurl_listをシャッフル
+        shuffleArrays(music_list,url_list,text_list);
+
+        // 最初の楽曲リスト・URLリストを取得
+        temp0 = getNextMusicList();
+        temp1 = getNextMusicList();
+        url_temp0 = getNextUrlList();
+        url_temp1 = getNextUrlList();
+        text_temp0 = getNextTextList();
+        text_temp1 = getNextTextList();
+        
+        // ボタンに楽曲名を追加
+        buttonTemp0.textContent = temp0[0];
+        buttonTemp1.textContent = temp1[0];
+        openUrlTemp0.textContent = text_temp0[0];
+        openUrlTemp1.textContent = text_temp1[0];
+
+        // 選択肢を非表示にし、質問ボタンを表示
+        document.getElementById('check-button').style.display = 'none';
+        document.getElementById('how-to-play').style.display = 'none';
+        document.getElementById('which-button').style.display = 'block';
+
+    });
+
+    let selectedCount = 0; 
+    let selectedCountDisplay = document.getElementById('selectedCount');
+
+    // 楽曲数を数える
+    function updateSelectedCount() {
+        selectedCount = 0; // リセット
+        let checkboxes = musicList.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach((checkbox) => {
+            if (checkbox.checked) {
+                selectedCount++;
+            }
+        });
+        selectedCountDisplay.textContent = selectedCount;
+    }
+
+    // チェックボックスと同期
+    let checkboxes = musicList.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener('change', updateSelectedCount);
+    });
+
+    // 楽曲数カウント更新
+    updateSelectedCount();
+
+    // 全選択・全解除用
+    let checkAllButton = document.getElementById('checkAll');
+    let uncheckAllButton = document.getElementById('uncheckAll');
+
+    checkAllButton.addEventListener('click', function() {
+        let checkboxes = musicList.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = true;
+        });
+        updateSelectedCount();
+    });
+
+    uncheckAllButton.addEventListener('click', function() {
+        let checkboxes = musicList.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        updateSelectedCount();
+    });
+
+    let lantahButton = document.getElementById('lantah');
+    let sugiruButton = document.getElementById('sugiru');
+    let hacchiButton = document.getElementById('hacchi');
+    let shu3Button = document.getElementById('shu3');
+    let hitsongButton = document.getElementById('hitsong');
+
+    lantahButton.addEventListener('click', function() {
+        let indicesToCheck = [0,1,2,3,4,5,6,7,8,9,10,39,40,42,44]; // music_listのインデックスに対応したチェック用リスト
+
+        let checkboxes = musicList.querySelectorAll('input[type="checkbox"]');
+
+        checkboxes.forEach((checkbox, index) => {
+            checkbox.checked = indicesToCheck.includes(index);
+        });
+
+        updateSelectedCount(); //楽曲数カウントを更新
+    });
+
+    sugiruButton.addEventListener('click', function() {
+        let indicesToCheck = [0,11,12,13,14,15,16,31,32,33,34,35,38,41,42,43]; // music_listのインデックスに対応したチェック用リスト
+
+        let checkboxes = musicList.querySelectorAll('input[type="checkbox"]');
+
+        checkboxes.forEach((checkbox, index) => {
+            checkbox.checked = indicesToCheck.includes(index);
+        });
+
+        updateSelectedCount(); //楽曲数カウントを更新
+    });
+
+    hacchiButton.addEventListener('click', function() {
+        let indicesToCheck = [0,17,18,19,20,30,31,32,33,34,35,37,42,43]; // music_listのインデックスに対応したチェック用リスト
+
+        let checkboxes = musicList.querySelectorAll('input[type="checkbox"]');
+
+        checkboxes.forEach((checkbox, index) => {
+            checkbox.checked = indicesToCheck.includes(index);
+        });
+
+        updateSelectedCount(); //楽曲数カウントを更新
+    });
+
+    shu3Button.addEventListener('click', function() {
+        let indicesToCheck = [0,21,22,23,24,25,26,27,28,29,30,33,34,35,36,42,43,45]; // music_listのインデックスに対応したチェック用リスト
+
+        let checkboxes = musicList.querySelectorAll('input[type="checkbox"]');
+
+        checkboxes.forEach((checkbox, index) => {
+            checkbox.checked = indicesToCheck.includes(index);
+        });
+
+        updateSelectedCount(); //楽曲数カウントを更新
+    });
+
+    hitsongButton.addEventListener('click', function() {
+        let indicesToCheck = [8,9,10,13,14,15,16,17,18,19,20,23,25,26,27,30,31,33,34,39]; // music_listのインデックスに対応したチェック用リスト
+
+        let checkboxes = musicList.querySelectorAll('input[type="checkbox"]');
+
+        checkboxes.forEach((checkbox, index) => {
+            checkbox.checked = indicesToCheck.includes(index);
+        });
+
+        updateSelectedCount(); //楽曲数カウントを更新
+    });
+
+
+    // シャッフル関数
+    function shuffleArrays(arr1, arr2, arr3) {
+        for (let i = arr1.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr1[i], arr1[j]] = [arr1[j], arr1[i]];
+            [arr2[i], arr2[j]] = [arr2[j], arr2[i]];
+            [arr3[i], arr3[j]] = [arr3[j], arr3[i]];
+        }
+    }
+
+    // 音楽リストから次の楽曲リストを取得
+    function getNextMusicList() {
+        if (music_list.length > 0) {
+            return music_list.shift();
+        } else {
+            return [];
+        }
+    }
+
+    // urlリストから次のurlリストを取得
+    function getNextUrlList() {
+        if (url_list.length > 0) {
+            return url_list.shift();
+        } else {
+            return [];
+        }
+    }
+
+    // textリストから次のtextリストを取得
+    function getNextTextList() {
+        if (text_list.length > 0) {
+            return text_list.shift();
+        } else {
+            return [];
+        }
+    }
+
+    // URLを開く関数
+    function openUrl(url) {
+        window.open(url, "_blank");
+    }
+
+    // temp0のURLに飛ぶボタンがクリックされたときの処理
+    document.getElementById("openUrlTemp0").addEventListener("click", function() {
+        if (url_temp0.length > 0) {
+            openUrl(url_temp0[0]);
+        }
+    });
+
+    // temp1のURLに飛ぶボタンがクリックされたときの処理
+    document.getElementById("openUrlTemp1").addEventListener("click", function() {
+        if (url_temp1.length > 0) {
+            openUrl(url_temp1[0]);
+        }
+    });
+
+    function getRandomImage() {
+            let images = ["ranking_ver1.png", "ranking_ver2.png"];
+            let randomIndex = Math.floor(Math.random() * images.length);
+            return images[randomIndex];
+        }
+
+    // 結果をHTML内の要素に表示
+    function updateResults() {
+        // temp0、temp1、concat_listがすべて空の場合、ボタンを非表示にする
+        if (temp0.length === 0 && temp1.length === 0 && concat_list.length === 0) {
+            document.getElementById('which-button').style.display = 'none';
+            document.getElementById('header').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('box').style.display = 'block';
+
+            let randomImage = getRandomImage();
+
+            let imgElement = document.createElement("img");
+            imgElement.src = randomImage;
+            imgElement.alt = "結果画面";
+            imgElement.style.maxWidth = "70%";
+
+            // div要素に追加
+            let rankingDiv = document.getElementById("ranking");
+            rankingDiv.innerHTML = ""; // 既存の内容をクリア
+            rankingDiv.appendChild(imgElement);
+        } 
+    }
+
+    function checkDiagnosis() {
+        // 遊び方・質問フォームを表示
+        document.getElementById('check-button').style.display = 'block';
+        document.getElementById('how-to-play').style.display = 'block';
+        
+        // 説明文・スタートボタンを非表示
+        document.getElementById('start-button').style.display = 'none';
+        document.getElementById('intro').style.display = 'none';
+        document.getElementById('updata-include').style.display = 'none';
+    }
+
+    <!-- 結果テーブルの更新 -->
+    function updateRankingTable() {
+        const rankingTable = document.getElementById("rankingBody");
+        rankingTable.innerHTML = ""; // 表のリセット
+
+        for (let i = 0; i < conclude_list.length; i++) {
+            const row = document.createElement("tr");
+            const rankCell = document.createElement("td");
+            rankCell.textContent = i + 1; // 1からランクを始める
+            row.appendChild(rankCell);
+
+            const musicCell = document.createElement("td");
+
+            const musicNames = Array.isArray(conclude_list[i]) ? conclude_list[i] : [conclude_list[i]];
+            const url = Array.isArray(url_conclude_list[i]) ? url_conclude_list[i] : [url_conclude_list[i]];
+
+            for (let j = 0; j < musicNames.length; j++) {
+                const musicLink = document.createElement("a");
+                musicLink.textContent = musicNames[j].trim();
+                musicLink.href = url[j]; // リンク要素の href 属性にURLを設定するアクションを実行する
+                musicLink.target = "_blank"; // 新規タブでurlを開く
+                musicCell.appendChild(musicLink); // musicLink というリンク要素をmusicCell というセル要素に追加
+                if (j < musicNames.length - 1) {
+                    musicCell.appendChild(document.createTextNode(', ')); // コンマの追加
+                }
+            }
+
+            row.appendChild(musicCell);
+            rankingTable.appendChild(row);
+
+            // リンクがクリックされたときの処理
+            musicCell.querySelectorAll("a").forEach((musicLink, index) => {
+                musicLink.addEventListener("click", function (event) {
+                    event.preventDefault(); // リンクのデフォルトの挙動を無効化
+                    window.open(url[index], "_blank"); // 新しいタブでURLを開く
+                });
+            });
+        }
+    }
+
+    // temp0のボタンがクリックされたときの処理
+    buttonTemp0.addEventListener("click", function() {
+        undoButton.style.display = "block"; 
+        // 1つ前の状態をスタックに保存
+        stateStack.push({
+            temp0: [...temp0],
+            temp1: [...temp1],
+            url_temp0: [...url_temp0],
+            url_temp1: [...url_temp1],
+            text_temp0: [...text_temp0],
+            text_temp1: [...text_temp1],
+            music_list: [...music_list],
+            url_list: [...url_list],
+            text_list: [...text_list],
+            concat_list: [...concat_list],
+            url_concat_list: [...url_concat_list],
+            text_concat_list: [...text_concat_list],
+            conclude_list: [...conclude_list],
+            url_conclude_list: [...url_conclude_list],
+            text_conclude_list: [...text_conclude_list]
+        });
+        if (music_list.length > 0) {
+            concat_list.push(temp0[0]); // ボタンに書かれた楽曲をconcat_listに格納
+            url_concat_list.push(url_temp0[0]); //対応するurlをurl_concat_listに格納
+            text_concat_list.push(text_temp0[0]); // 対応するテキストをtext_concat_listに格納
+            temp0.shift(); //temp0から楽曲を取り出す
+            url_temp0.shift(); //url_temp0からurlを取り出す
+            text_temp0.shift(); //text_temp0からtextを取り出す
+            if (temp0.length > 0) {
+                buttonTemp0.textContent = temp0[0];
+                buttonTemp1.textContent = temp1[0];
+                openUrlTemp0.textContent = text_temp0[0];
+                openUrlTemp1.textContent = text_temp1[0];
+            } else if (temp1.length > 0) {
+                buttonTemp0.textContent = temp0[0];
+                buttonTemp1.textContent = temp1[0];
+                openUrlTemp0.textContent = text_temp0[0];
+                openUrlTemp1.textContent = text_temp1[0];
+            } 
+            if (temp0.length === 0) {
+                concat_list = concat_list.concat(temp1); //temp1の楽曲をconcat_listに追加
+                url_concat_list = url_concat_list.concat(url_temp1); //url_temp1のurlをurl_concat_listに追加
+                text_concat_list = text_concat_list.concat(text_temp1); //text_temp1のテキストをtext_concat_listに追加
+                music_list = music_list.concat([concat_list]);
+                url_list = url_list.concat([url_concat_list]);
+                text_list = text_list.concat([text_concat_list]);
+                concat_list = []; // concat_listをリセット
+                url_concat_list = [];
+                text_concat_list = [];
+                temp0 = getNextMusicList();
+                temp1 = getNextMusicList();
+                url_temp0 = getNextUrlList();
+                url_temp1 = getNextUrlList();
+                text_temp0 = getNextTextList();
+                text_temp1 = getNextTextList();
+                if (temp0.length > 0) {
+                    buttonTemp0.textContent = temp0[0];
+                    buttonTemp1.textContent = temp1[0];
+                    openUrlTemp0.textContent = text_temp0[0];
+                    openUrlTemp1.textContent = text_temp1[0];
+                } else if (temp1.length > 0) {
+                    buttonTemp0.textContent = temp0[0];
+                    buttonTemp1.textContent = temp1[0];
+                    openUrlTemp0.textContent = text_temp0[0];
+                    openUrlTemp1.textContent = text_temp1[0];
+                } else {
+                    // 楽曲リストがなくなったら終了
+                    updateResults();
+                }
+            } else if (temp1.length === 0) {
+                concat_list = concat_list.concat(temp0); //temp0の楽曲をconcat_listに追加
+                url_concat_list = url_concat_list.concat(url_temp0); //url_temp0のurlをurl_concat_listに追加
+                text_concat_list = text_concat_list.concat(text_temp0); //temp0のテキストをtext_concat_listに追加
+                music_list = music_list.concat([concat_list]);
+                url_list = url_list.concat([url_concat_list]);
+                text_list = text_list.concat([text_concat_list]);
+                concat_list = []; // concat_listをリセット
+                url_concat_list = [];
+                text_concat_list = [];
+                temp0 = getNextMusicList();
+                temp1 = getNextMusicList();
+                url_temp0 = getNextUrlList();
+                url_temp1 = getNextUrlList();
+                text_temp0 = getNextTextList();
+                text_temp1 = getNextTextList();
+                if (temp0.length > 0) {
+                    buttonTemp0.textContent = temp0[0];
+                    buttonTemp1.textContent = temp1[0];
+                    openUrlTemp0.textContent = text_temp0[0];
+                    openUrlTemp1.textContent = text_temp1[0];
+                } else if (temp1.length > 0) {
+                    buttonTemp0.textContent = temp0[0];
+                    buttonTemp1.textContent = temp1[0];
+                    openUrlTemp0.textContent = text_temp0[0];
+                    openUrlTemp1.textContent = text_temp1[0];
+                } else {
+                    // 楽曲リストがなくなったら終了
+                    updateResults();    
+                }
+            }
+        } else if (music_list.length === 0) {
+            conclude_list.push(temp0[0]); // ボタンに書かれた楽曲をconclude_listに格納
+            url_conclude_list.push(url_temp0[0]); //対応するurlをurl_conclude_listに格納
+            text_conclude_list.push(text_temp0[0]); // 対応するテキストをtext_conclude_listに格納
+            temp0.shift(); // temp0から楽曲を取り出す
+            url_temp0.shift(); //url_temp0からurlを取り出す
+            text_temp0.shift(); // text_temp0からテキストを取り出す
+            if (temp0.length > 0) {
+                buttonTemp0.textContent = temp0[0];
+                buttonTemp1.textContent = temp1[0];
+                openUrlTemp0.textContent = text_temp0[0];
+                openUrlTemp1.textContent = text_temp1[0];
+            } else if (temp1.length > 0) {
+                buttonTemp0.textContent = temp0[0];
+                buttonTemp1.textContent = temp1[0];
+                openUrlTemp0.textContent = text_temp0[0];
+                openUrlTemp1.textContent = text_temp1[0];
+            } 
+            if (temp0.length === 0) {
+                conclude_list = conclude_list.concat(temp1); //temp1の楽曲をconclude_listに追加
+                url_conclude_list = url_conclude_list.concat(url_temp1); //url_temp1のurlをurl_conclude_listに追加
+                text_conclude_list = text_conclude_list.concat(text_temp1); //text_temp1のテキストをtext_conclude_listに追加
+                concat_list = []; // concat_listをリセット
+                url_concat_list = [];
+                text_concat_list = [];
+                temp0 = [];
+                temp1 = [];
+                url_temp0 = [];
+                url_temp1 = [];
+                text_temp0 = [];
+                text_temp1 = [];
+                updateResults();
+                updateRankingTable();
+            } else if (temp1.length === 0) {
+                conclude_list = conclude_list.concat(temp0); //temp0の楽曲をconclude_listに追加
+                url_conclude_list = url_conclude_list.concat(url_temp0); //url_temp0のurlをconclude_listに追加
+                text_conclude_list = text_conclude_list.concat(text_temp0); //text_temp0のテキストをtext_conclude_listに追加
+                concat_list = []; // concat_listをリセット
+                url_concat_list = [];
+                text_concat_list = [];
+                temp0 = [];
+                temp1 = [];
+                url_temp0 = [];
+                url_temp1 = [];
+                text_temp0 = [];
+                text_temp1 = [];
+                updateResults();
+                updateRankingTable();
+            }
+        }
+        updateResults(); // 結果を更新
+    });
+
+    // temp1のボタンがクリックされたときの処理
+    buttonTemp1.addEventListener("click", function() {
+        undoButton.style.display = "block"; 
+        // 1つ前の状態をスタックに保存
+        stateStack.push({
+            temp0: [...temp0],
+            temp1: [...temp1],
+            url_temp0: [...url_temp0],
+            url_temp1: [...url_temp1],
+            text_temp0: [...text_temp0],
+            text_temp1: [...text_temp1],
+            music_list: [...music_list],
+            url_list: [...url_list],
+            text_list: [...text_list],
+            concat_list: [...concat_list],
+            url_concat_list: [...url_concat_list],
+            text_concat_list: [...text_concat_list],
+            conclude_list: [...conclude_list],
+            url_conclude_list: [...url_conclude_list],
+            text_conclude_list: [...text_conclude_list]
+        });
+        if (music_list.length > 0) {
+            concat_list.push(temp1[0]); // ボタンに書かれた楽曲をconcat_listに格納
+            url_concat_list.push(url_temp1[0]); //対応するurlをurl_concat_listに格納
+            text_concat_list.push(text_temp1[0]); // 対応するテキストをconcat_listに格納
+            temp1.shift(); // temp1から楽曲を取り出す
+            url_temp1.shift(); // url_temp1からurlを取り出す
+            text_temp1.shift(); //text_temp1からテキストを取り出す
+            if (temp0.length > 0) {
+                buttonTemp0.textContent = temp0[0];
+                buttonTemp1.textContent = temp1[0];
+                openUrlTemp0.textContent = text_temp0[0];
+                openUrlTemp1.textContent = text_temp1[0];
+            } else if (temp1.length > 0) {
+                buttonTemp0.textContent = temp0[0];
+                buttonTemp1.textContent = temp1[0];
+                openUrlTemp0.textContent = text_temp0[0];
+                openUrlTemp1.textContent = text_temp1[0];
+            } 
+            if (temp0.length === 0) {
+                concat_list = concat_list.concat(temp1); //temp1の楽曲をconcat_listに追加
+                url_concat_list = url_concat_list.concat(url_temp1); //url_temp1のurlをconcat_listに追加
+                text_concat_list = text_concat_list.concat(text_temp1); //temp1のテキストをtext_concat_listに追加
+                music_list = music_list.concat([concat_list]);
+                url_list = url_list.concat([url_concat_list]);
+                text_list = text_list.concat([text_concat_list]);
+                concat_list = []; // concat_listをリセット
+                url_concat_list = [];
+                text_concat_list = [];
+                temp0 = getNextMusicList();
+                temp1 = getNextMusicList();
+                url_temp0 = getNextUrlList();
+                url_temp1 = getNextUrlList();
+                text_temp0 = getNextTextList();
+                text_temp1 = getNextTextList();
+                if (temp0.length > 0) {
+                    buttonTemp0.textContent = temp0[0];
+                    buttonTemp1.textContent = temp1[0];
+                    openUrlTemp0.textContent = text_temp0[0];
+                    openUrlTemp1.textContent = text_temp1[0];
+                } else if (temp1.length > 0) {
+                    buttonTemp0.textContent = temp0[0];
+                    buttonTemp1.textContent = temp1[0];
+                    openUrlTemp0.textContent = text_temp0[0];
+                    openUrlTemp1.textContent = text_temp1[0];
+                } else {
+                    // 楽曲リストがなくなったら終了
+                    updateResults();
+                }
+            } else if (temp1.length === 0) {
+                concat_list = concat_list.concat(temp0); //temp0の楽曲をconcat_listに追加
+                url_concat_list = url_concat_list.concat(url_temp0); //url_temp0のurlをconcat_listに追加
+                text_concat_list = text_concat_list.concat(text_temp0); //temp0のテキストをtext_concat_listに追加
+                music_list = music_list.concat([concat_list]);
+                url_list = url_list.concat([url_concat_list]);
+                text_list = text_list.concat([text_concat_list]);
+                concat_list = []; // concat_listをリセット
+                url_concat_list = [];
+                text_concat_list = [];
+                temp0 = getNextMusicList();
+                temp1 = getNextMusicList();
+                url_temp0 = getNextUrlList();
+                url_temp1 = getNextUrlList();
+                text_temp0 = getNextTextList();
+                text_temp1 = getNextTextList();
+                if (temp0.length > 0) {
+                    buttonTemp0.textContent = temp0[0];
+                    buttonTemp1.textContent = temp1[0];
+                    openUrlTemp0.textContent = text_temp0[0];
+                    openUrlTemp1.textContent = text_temp1[0];
+                } else if (temp1.length > 0) {
+                    buttonTemp0.textContent = temp0[0];
+                    buttonTemp1.textContent = temp1[0];
+                    openUrlTemp0.textContent = text_temp0[0];
+                    openUrlTemp1.textContent = text_temp1[0];
+                } else {
+                    // 楽曲リストがなくなったら終了
+                    updateResults();
+                }
+            }
+        } else if (music_list.length === 0) {
+            conclude_list.push(temp1[0]); // ボタンに書かれた楽曲をconclude_listに格納
+            url_conclude_list.push(url_temp1[0]); //対応するurlをurl_conclude_listに格納
+            text_conclude_list.push(text_temp1[0]); // 対応するテキストをtext_conclude_listに格納
+            temp1.shift(); // temp1から楽曲を取り出す
+            url_temp1.shift(); // url_temp1からurlを取り出す
+            text_temp1.shift(); //text_temp1からテキストを取り出す
+            if (temp0.length > 0) {
+                buttonTemp0.textContent = temp0[0];
+                buttonTemp1.textContent = temp1[0];
+                openUrlTemp0.textContent = text_temp0[0];
+                openUrlTemp1.textContent = text_temp1[0];
+            } else if (temp1.length > 0) {
+                buttonTemp0.textContent = temp0[0];
+                buttonTemp1.textContent = temp1[0];
+                openUrlTemp0.textContent = text_temp0[0];
+                openUrlTemp1.textContent = text_temp1[0];
+            } 
+            if (temp0.length === 0) {
+                conclude_list = conclude_list.concat(temp1); //temp1の楽曲をconclude_listに追加
+                url_conclude_list = url_conclude_list.concat(url_temp1); //url_temp1のurlをconclude_listに追加
+                text_conclude_list = text_conclude_list.concat(text_temp1); //text_temp1のテキストをtext_conclude_listに追加
+                concat_list = []; // concat_listをリセット
+                url_concat_list = [];
+                text_concat_list = [];
+                temp0 = [];
+                temp1 = [];
+                url_temp0 = [];
+                url_temp1 = [];
+                text_temp0 = [];
+                text_temp1 = [];
+                updateResults();
+                updateRankingTable();
+            } else if (temp1.length === 0) {
+                conclude_list = conclude_list.concat(temp0);  //temp0の楽曲をconclude_listに追加
+                url_conclude_list = url_conclude_list.concat(url_temp0); //url_temp0のurlをurl_conclude_listに追加
+                text_conclude_list = text_conclude_list.concat(text_temp0); //text_temp0のテキストをtext_conclude_listに追加
+                concat_list = []; // concat_listをリセット
+                url_concat_list = [];
+                text_concat_list = [];
+                temp0 = [];
+                temp1 = [];
+                url_temp0 = [];
+                url_temp1 = [];
+                text_temp0 = [];
+                text_temp1 = [];
+                updateResults();
+                updateRankingTable();
+            }
+        }
+        updateResults(); // 結果を更新
+    });
+
+    // 戻るボタンがクリックされたときの処理
+    undoButton.addEventListener("click", function() {
+        undoButton.style.display = "none";
+
+        if (stateStack.length > 0) {
+            // スタックから前の状態を取得
+            let prevState = stateStack.pop();
+
+            // 状態を復元
+            temp0 = [...prevState.temp0]; // 新しい配列にコピー
+            temp1 = [...prevState.temp1]; 
+            url_temp0 = [...prevState.url_temp0];
+            url_temp1 = [...prevState.url_temp1];
+            text_temp0 = [...prevState.text_temp0];
+            text_temp1 = [...prevState.text_temp1];
+            concat_list = [...prevState.concat_list]; 
+            url_concat_list = [...prevState.url_concat_list]; 
+            text_concat_list = [...prevState.text_concat_list]; 
+            music_list = prevState.music_list.map(arr => [...arr]); // 配列内の各リストを新しい配列にコピー
+            url_list = prevState.url_list.map(arr => [...arr]);
+            text_list = prevState.text_list.map(arr => [...arr]);
+            conclude_list = prevState.conclude_list.map(arr => [...arr]);
+            url_conclude_list = prevState.url_conclude_list.map(arr => [...arr]);
+            text_conclude_list = prevState.text_conclude_list.map(arr => [...arr]);
+
+            // ボタンのテキストを更新
+            buttonTemp0.textContent = temp0[0] || "";
+            buttonTemp1.textContent = temp1[0] || "";
+            openUrlTemp0.textContent = text_temp0[0] || "";
+            openUrlTemp1.textContent = text_temp1[0] || "";
+
+            // 結果を更新
+            updateResults();
+            
+            // 連続で戻るために、再び前の状態をスタックにプッシュ
+            stateStack.push(prevState);
+        }
+    });
+
+
+    //ツイート用動作
+    document.getElementById('twitter-share-button').addEventListener('click', function () {
+        // 1位、2位、3位の楽曲名を取得
+        let rankingTable = document.getElementById("rankingTable");
+        let rows = rankingTable.getElementsByTagName("tr");
+        let firstPlace = rows[1].getElementsByTagName("td")[1].textContent; // 1位の楽曲名
+        let secondPlace = rows[2].getElementsByTagName("td")[1].textContent; // 2位の楽曲名
+        let thirdPlace = rows[3].getElementsByTagName("td")[1].textContent; // 3位の楽曲名
+
+        let tweetText = `私のナポリの男たち楽曲ランキングは\n第1位:：${firstPlace}\n第2位：${secondPlace}\n第3位：${thirdPlace}\n`;
+
+        let encodedTweetText = encodeURIComponent(tweetText);
+        let encodedURL = encodeURIComponent('https://btcksho8.github.io/tt/');
+        let hashtags = 'nplmusic_sort';
+
+        let twitterShareURL = `https://twitter.com/intent/tweet?text=${encodedTweetText}&url=${encodedURL}&hashtags=${hashtags}`;
+
+        window.open(twitterShareURL, '_blank');
+    });
+
+</script>
+</body>
+</html>
